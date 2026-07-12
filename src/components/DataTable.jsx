@@ -2,9 +2,13 @@ import React from 'react';
 import './DataTable.css';
 import { COLUMNS } from '../utils/dataLoader';
 
-const DISPLAY_COLUMNS = COLUMNS.filter((c) => c !== 'Shock Normal');
+export default function DataTable({ data, selectedParameters = [] }) {
+  const displayColumns = React.useMemo(() => {
+    return COLUMNS.filter(
+      (c) => c === 'Date' || c === 'Time' || c === 'Shock Type' || selectedParameters.includes(c)
+    );
+  }, [selectedParameters]);
 
-export default function DataTable({ data }) {
   if (!data || data.length === 0) {
     return (
       <div className="table-empty">
@@ -24,7 +28,7 @@ export default function DataTable({ data }) {
           <thead>
             <tr>
               <th className="row-num">#</th>
-              {DISPLAY_COLUMNS.map((col) => (
+              {displayColumns.map((col) => (
                 <th key={col}>{col}</th>
               ))}
             </tr>
@@ -33,7 +37,7 @@ export default function DataTable({ data }) {
             {data.map((row, i) => (
               <tr key={i}>
                 <td className="row-num">{i + 1}</td>
-                {DISPLAY_COLUMNS.map((col) => (
+                {displayColumns.map((col) => (
                   <td key={col} className={col === 'Shock Type' ? `type-cell type-${row[col]}` : ''}>
                     {row[col]}
                   </td>
@@ -46,3 +50,4 @@ export default function DataTable({ data }) {
     </div>
   );
 }
+

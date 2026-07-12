@@ -15,7 +15,7 @@ const SPACECRAFT = [
   { value: 'SOHO', label: 'SOHO' },
 ];
 
-function Dropdown({ id, label, icon, options, selected, onToggle }) {
+function Dropdown({ id, label, icon, options, selected, onToggle, onSelectAll, onClearAll }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -39,30 +39,52 @@ function Dropdown({ id, label, icon, options, selected, onToggle }) {
         className={`dropdown-trigger ${open ? 'active' : ''} ${selected.length > 0 ? 'has-selection' : ''}`}
         onClick={() => setOpen(!open)}
       >
-        <span className="dropdown-icon">{icon}</span>
+        {icon && <span className="dropdown-icon">{icon}</span>}
         <span className="dropdown-label">{summary}</span>
         <span className={`dropdown-chevron ${open ? 'rotated' : ''}`}>▾</span>
       </button>
       {open && (
         <div className="dropdown-menu">
-          {options.map((opt) => (
-            <label key={opt.value} className="dropdown-option">
-              <input
-                type="checkbox"
-                checked={selected.includes(opt.value)}
-                onChange={() => onToggle(opt.value)}
-              />
-              <span className="checkmark"></span>
-              <span className="option-text">{opt.label}</span>
-            </label>
-          ))}
+          {(onSelectAll || onClearAll) && (
+            <div className="dropdown-actions">
+              {onSelectAll && (
+                <button type="button" onClick={onSelectAll} className="dropdown-action-btn">
+                  Select All
+                </button>
+              )}
+              {onClearAll && (
+                <button type="button" onClick={onClearAll} className="dropdown-action-btn">
+                  Clear All
+                </button>
+              )}
+            </div>
+          )}
+          <div className="dropdown-options-list">
+            {options.map((opt) => (
+              <label key={opt.value} className="dropdown-option">
+                <input
+                  type="checkbox"
+                  checked={selected.includes(opt.value)}
+                  onChange={() => onToggle(opt.value)}
+                />
+                <span className="checkmark"></span>
+                <span className="option-text">{opt.label}</span>
+              </label>
+            ))}
+          </div>
         </div>
       )}
     </div>
   );
 }
 
-export default function FilterPanel({ filters, onFilterChange }) {
+export default function FilterPanel({
+  filters,
+  onFilterChange,
+  selectedParameters = [],
+  onParameterChange,
+  allParameters = [],
+}) {
   const { shockTypes = [], startDate = '', endDate = '', spacecraft = [] } = filters;
 
   const toggleShockType = (val) => {
@@ -79,12 +101,18 @@ export default function FilterPanel({ filters, onFilterChange }) {
     onFilterChange({ ...filters, spacecraft: next });
   };
 
+  const toggleParameter = (val) => {
+    const next = selectedParameters.includes(val)
+      ? selectedParameters.filter((v) => v !== val)
+      : [...selectedParameters, val];
+    onParameterChange(next);
+  };
+
   return (
     <section className="filter-panel" id="filter-panel">
       <Dropdown
         id="filter-shock-type"
         label="Shock Type"
-        icon="⚡"
         options={SHOCK_TYPES}
         selected={shockTypes}
         onToggle={toggleShockType}
@@ -120,11 +148,21 @@ export default function FilterPanel({ filters, onFilterChange }) {
       <Dropdown
         id="filter-spacecraft"
         label="Spacecraft"
-        icon="🛰️"
         options={SPACECRAFT}
         selected={spacecraft}
         onToggle={toggleSpacecraft}
       />
+
+      <Dropdown
+        id="filter-parameters"
+        label="Parameters"
+        options={allParameters.map((p) => ({ value: p, label: p }))}
+        selected={selectedParameters}
+        onToggle={toggleParameter}
+        onSelectAll={() => onParameterChange(allParameters)}
+        onClearAll={() => onParameterChange([])}
+      />
     </section>
   );
 }
+

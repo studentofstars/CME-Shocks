@@ -80,6 +80,7 @@
     opacity: 0;
     transform: translateY(-4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -119,19 +120,19 @@
   transition: all 0.15s ease;
 }
 
-.dropdown-option input:checked ~ .checkmark {
+.dropdown-option input:checked~.checkmark {
   background: var(--accent-blue);
   border-color: var(--accent-blue);
 }
 
-.dropdown-option input:checked ~ .checkmark::after {
+.dropdown-option input:checked~.checkmark::after {
   content: '✓';
   color: white;
   font-size: 0.7rem;
   font-weight: 700;
 }
 
-.dropdown-option input:checked ~ .option-text {
+.dropdown-option input:checked~.option-text {
   color: var(--text-primary);
 }
 
@@ -197,4 +198,41 @@
   .time-filter {
     justify-content: center;
   }
+}
+
+.dropdown-options-list {
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.dropdown-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.2rem 0.4rem 0.5rem;
+  margin-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.dropdown-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--accent-blue);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+  font-family: var(--font-sans);
+}
+
+.dropdown-action-btn:hover {
+  background: var(--bg-glass-hover);
+  color: var(--text-primary);
+}
+
+:root.light .time-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.2);
 }

@@ -27,6 +27,30 @@
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
+:root.light {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-glass: rgba(15, 23, 42, 0.04);
+  --bg-glass-hover: rgba(15, 23, 42, 0.08);
+  --border-glass: rgba(15, 23, 42, 0.08);
+  --border-active: rgba(37, 99, 235, 0.4);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --accent-blue: #2563eb;
+  --accent-cyan: #0891b2;
+  --accent-violet: #7c3aed;
+  --accent-green: #059669;
+  --accent-orange: #ea580c;
+  --gradient-header: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #0891b2 100%);
+  --gradient-bg: radial-gradient(ellipse at 20% 50%, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
+                 radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.03) 0%, transparent 50%),
+                 radial-gradient(ellipse at 50% 80%, rgba(8, 145, 178, 0.02) 0%, transparent 50%);
+  --shadow-lg: 0 8px 32px rgba(15, 23, 42, 0.08);
+  --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.12);
+}
+
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -67,6 +91,11 @@ body::before {
   color: var(--text-primary);
 }
 
+:root.light ::selection {
+  background: rgba(37, 99, 235, 0.15);
+  color: var(--text-primary);
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -84,3 +113,16 @@ body::before {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.25);
 }
+
+:root.light ::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+:root.light ::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.15);
+}
+
+:root.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.25);
+}
+
