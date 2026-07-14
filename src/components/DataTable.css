@@ -69,17 +69,26 @@
   color: var(--text-primary);
 }
 
-.row-num {
+/* Shock ID column */
+.shock-id-col {
+  font-family: var(--font-mono) !important;
+  font-size: 0.72rem !important;
   color: var(--text-muted) !important;
-  font-size: 0.7rem !important;
-  width: 40px;
-  text-align: center !important;
+  white-space: nowrap;
+  min-width: 140px;
+  letter-spacing: 0.02em;
 }
 
+.data-table tbody tr:hover .shock-id-col {
+  color: var(--accent-cyan) !important;
+}
+
+/* Shock type cells */
 .type-cell {
   font-weight: 600;
   font-family: var(--font-mono);
   letter-spacing: 0.05em;
+  text-align: center;
 }
 
 .type-FF { color: var(--accent-blue); }
@@ -87,7 +96,31 @@
 .type-SF { color: var(--accent-green); }
 .type-SR { color: var(--accent-violet); }
 .type-SFD { color: var(--accent-cyan); }
+.type-SRD { color: #f472b6; }
 
+/* Jump percentage columns */
+.jump-header {
+  color: var(--accent-violet) !important;
+  font-style: italic;
+  text-align: center;
+}
+
+.jump-cell {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.jump-positive {
+  color: var(--accent-green) !important;
+}
+
+.jump-negative {
+  color: var(--accent-orange) !important;
+}
+
+/* Empty state */
 .table-empty {
   display: flex;
   flex-direction: column;

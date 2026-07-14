@@ -236,3 +236,156 @@
 :root.light .time-input::-webkit-calendar-picker-indicator {
   filter: invert(0.2);
 }
+
+/* ── Conditions Dropdown ── */
+.conditions-dropdown {
+  position: relative;
+}
+
+.conditions-menu {
+  min-width: 380px;
+  max-height: 480px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  right: 0;
+  left: auto;
+}
+
+.conditions-header {
+  padding: 0.75rem 1rem 0.5rem;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.conditions-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.conditions-list {
+  overflow-y: auto;
+  max-height: 340px;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.condition-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: background 0.12s ease;
+}
+
+.condition-row:hover {
+  background: var(--bg-glass-hover);
+}
+
+.condition-param {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.condition-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.condition-input {
+  width: 110px;
+  padding: 0.35rem 0.5rem;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.condition-input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(99, 149, 255, 0.12);
+}
+
+.condition-input::placeholder {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+/* Remove number input spinners */
+.condition-input::-webkit-outer-spin-button,
+.condition-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.condition-input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+
+.conditions-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid var(--border-glass);
+}
+
+.conditions-btn {
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.conditions-btn-clear {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: var(--border-glass);
+}
+
+.conditions-btn-clear:hover {
+  background: var(--bg-glass-hover);
+  color: var(--text-secondary);
+}
+
+.conditions-btn-apply {
+  background: var(--accent-blue);
+  color: #fff;
+  border-color: var(--accent-blue);
+}
+
+.conditions-btn-apply:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 0 12px rgba(99, 149, 255, 0.25);
+}
+
+@media (max-width: 768px) {
+  .conditions-menu {
+    min-width: 300px;
+    left: 0;
+    right: auto;
+  }
+
+  .condition-input {
+    width: 90px;
+  }
+}

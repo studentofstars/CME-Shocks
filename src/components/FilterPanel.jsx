@@ -6,6 +6,8 @@ const SHOCK_TYPES = [
   { value: 'FR', label: 'FR — Fast Reverse' },
   { value: 'SF', label: 'SF — Slow Forward' },
   { value: 'SR', label: 'SR — Slow Reverse' },
+  { value: 'SFD', label: 'SFD — Slow Forward (D)' },
+  { value: 'SRD', label: 'SRD — Slow Reverse (D)' },
 ];
 
 const SPACECRAFT = [
@@ -78,14 +80,113 @@ function Dropdown({ id, label, icon, options, selected, onToggle, onSelectAll, o
   );
 }
 
+function ConditionsDropdown({ parameters, conditions, onConditionsChange }) {
+  const [open, setOpen] = useState(false);
+  const [localConditions, setLocalConditions] = useState({});
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  // Sync local state when dropdown opens
+  useEffect(() => {
+    if (open) {
+      setLocalConditions({ ...conditions });
+    }
+  }, [open]);
+
+  const updateLocal = (param, value) => {
+    setLocalConditions((prev) => ({
+      ...prev,
+      [param]: value,
+    }));
+  };
+
+  const handleApply = () => {
+    // Only keep entries that have a non-empty value
+    const cleaned = {};
+    Object.entries(localConditions).forEach(([param, val]) => {
+      if (val !== '' && val !== undefined) {
+        cleaned[param] = val;
+      }
+    });
+    onConditionsChange(cleaned);
+    setOpen(false);
+  };
+
+  const handleClear = () => {
+    setLocalConditions({});
+    onConditionsChange({});
+    setOpen(false);
+  };
+
+  const activeCount = Object.values(conditions).filter(
+    (v) => v !== '' && v !== undefined
+  ).length;
+
+  return (
+    <div className="dropdown conditions-dropdown" ref={ref} id="filter-conditions">
+      <button
+        className={`dropdown-trigger ${open ? 'active' : ''} ${activeCount > 0 ? 'has-selection' : ''}`}
+        onClick={() => setOpen(!open)}
+      >
+        <span className="dropdown-label">
+          {activeCount > 0 ? `Conditions (${activeCount})` : 'Conditions'}
+        </span>
+        <span className={`dropdown-chevron ${open ? 'rotated' : ''}`}>▾</span>
+      </button>
+      {open && (
+        <div className="dropdown-menu conditions-menu">
+          <div className="conditions-header">
+            <span className="conditions-title">Filter by threshold (≥ value)</span>
+          </div>
+          <div className="conditions-list">
+            {parameters.map((param) => {
+              const val = localConditions[param] || '';
+              return (
+                <div key={param} className="condition-row">
+                  <span className="condition-param">{param}</span>
+                  <div className="condition-inputs">
+                    <input
+                      type="number"
+                      className="condition-input"
+                      placeholder="≥ value"
+                      value={val}
+                      onChange={(e) => updateLocal(param, e.target.value)}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="conditions-actions">
+            <button type="button" className="conditions-btn conditions-btn-clear" onClick={handleClear}>
+              Clear All
+            </button>
+            <button type="button" className="conditions-btn conditions-btn-apply" onClick={handleApply}>
+              Apply
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function FilterPanel({
   filters,
   onFilterChange,
   selectedParameters = [],
   onParameterChange,
   allParameters = [],
+  conditionParameters = [],
 }) {
-  const { shockTypes = [], startDate = '', endDate = '', spacecraft = [] } = filters;
+  const { shockTypes = [], startDate = '', endDate = '', spacecraft = [], conditions = {} } = filters;
 
   const toggleShockType = (val) => {
     const next = shockTypes.includes(val)
@@ -106,6 +207,10 @@ export default function FilterPanel({
       ? selectedParameters.filter((v) => v !== val)
       : [...selectedParameters, val];
     onParameterChange(next);
+  };
+
+  const handleConditionsChange = (newConditions) => {
+    onFilterChange({ ...filters, conditions: newConditions });
   };
 
   return (
@@ -162,7 +267,12 @@ export default function FilterPanel({
         onSelectAll={() => onParameterChange(allParameters)}
         onClearAll={() => onParameterChange([])}
       />
+
+      <ConditionsDropdown
+        parameters={conditionParameters}
+        conditions={conditions}
+        onConditionsChange={handleConditionsChange}
+      />
     </section>
   );
 }
-

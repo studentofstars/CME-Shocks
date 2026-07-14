@@ -1,6 +1,17 @@
 .site-header {
-  text-align: center;
-  padding: 2.5rem 2rem 1.5rem;
+  padding: 2.5rem 0 1.5rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.header-text {
+  text-align: left;
+  min-width: 0;
 }
 
 .site-header h1 {
@@ -18,4 +29,98 @@
   font-size: 0.95rem;
   color: var(--text-muted);
   font-weight: 400;
+}
+
+/* Header accent image */
+.header-image {
+  flex-shrink: 0;
+  width: 340px;
+  aspect-ratio: 928 / 569;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(99, 149, 255, 0.08);
+  position: relative;
+  margin-left: 7cm;
+}
+
+.header-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.header-image:hover img {
+  transform: scale(1.05);
+}
+
+/* Info Credit Button */
+.image-credit-btn {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(10, 14, 26, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-family: var(--font-serif), serif;
+  font-size: 0.75rem;
+  font-style: italic;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.image-credit-btn:hover {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  transform: scale(1.1);
+}
+
+/* Subtle glow ring on hover */
+.header-image::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  pointer-events: none;
+}
+
+.header-image:hover::after {
+  border-color: rgba(99, 149, 255, 0.25);
+  box-shadow: 0 0 24px rgba(99, 149, 255, 0.12);
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .header-text {
+    text-align: center;
+  }
+
+  .header-image {
+    width: 280px;
+    height: auto;
+    aspect-ratio: 928 / 569;
+    margin-left: 0;
+  }
+
+  .site-header h1 {
+    font-size: 1.6rem;
+  }
 }
