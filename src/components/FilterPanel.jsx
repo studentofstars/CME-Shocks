@@ -6,8 +6,8 @@ const SHOCK_TYPES = [
   { value: 'FR', label: 'FR — Fast Reverse' },
   { value: 'SF', label: 'SF — Slow Forward' },
   { value: 'SR', label: 'SR — Slow Reverse' },
-  { value: 'SFD', label: 'SFD — Slow Forward (D)' },
-  { value: 'SRD', label: 'SRD — Slow Reverse (D)' },
+  { value: 'SFD', label: 'SFD — Slow Forward Discontinuity' },
+  { value: 'SRD', label: 'SRD — Slow Reverse Discontinuity' },
 ];
 
 const SPACECRAFT = [
@@ -80,7 +80,7 @@ function Dropdown({ id, label, icon, options, selected, onToggle, onSelectAll, o
   );
 }
 
-function ConditionsDropdown({ parameters, conditions, onConditionsChange }) {
+function ConditionsDropdown({ parameters, conditions, onConditionsChange, onAutoSelectParameters }) {
   const [open, setOpen] = useState(false);
   const [localConditions, setLocalConditions] = useState({});
   const ref = useRef(null);
@@ -115,6 +115,10 @@ function ConditionsDropdown({ parameters, conditions, onConditionsChange }) {
         cleaned[param] = val;
       }
     });
+    // Auto-select parameters that have condition values
+    if (onAutoSelectParameters) {
+      onAutoSelectParameters(Object.keys(cleaned));
+    }
     onConditionsChange(cleaned);
     setOpen(false);
   };
@@ -144,6 +148,14 @@ function ConditionsDropdown({ parameters, conditions, onConditionsChange }) {
         <div className="dropdown-menu conditions-menu">
           <div className="conditions-header">
             <span className="conditions-title">Filter by threshold (≥ value)</span>
+            <div className="conditions-actions">
+              <button type="button" className="conditions-btn conditions-btn-clear" onClick={handleClear}>
+                Clear All
+              </button>
+              <button type="button" className="conditions-btn conditions-btn-apply" onClick={handleApply}>
+                Apply
+              </button>
+            </div>
           </div>
           <div className="conditions-list">
             {parameters.map((param) => {
@@ -163,14 +175,6 @@ function ConditionsDropdown({ parameters, conditions, onConditionsChange }) {
                 </div>
               );
             })}
-          </div>
-          <div className="conditions-actions">
-            <button type="button" className="conditions-btn conditions-btn-clear" onClick={handleClear}>
-              Clear All
-            </button>
-            <button type="button" className="conditions-btn conditions-btn-apply" onClick={handleApply}>
-              Apply
-            </button>
           </div>
         </div>
       )}
@@ -211,6 +215,37 @@ export default function FilterPanel({
 
   const handleConditionsChange = (newConditions) => {
     onFilterChange({ ...filters, conditions: newConditions });
+  };
+
+  // Map condition parameter names to the actual table column names they affect
+  const CONDITION_TO_COLUMNS = {
+    'V_sh': ['V_sh'],
+    'B_1': ['B_1'],
+    'B_2': ['B_2'],
+    'Jump % (B)': ['B_1', 'B_2'],
+    'V_1': ['V_1'],
+    'V_2': ['V_2'],
+    'Jump % (V)': ['V_1', 'V_2'],
+    'den_1': ['den_1'],
+    'den_2': ['den_2'],
+    'Jump % (den)': ['den_1', 'den_2'],
+    'T_1': ['T_1'],
+    'T_2': ['T_2'],
+    'Jump % (T)': ['T_1', 'T_2'],
+    'M_A1': ['M_A1'],
+    'M_A2': ['M_A2'],
+    'M_ms1': ['M_ms1'],
+    'M_ms2': ['M_ms2'],
+  };
+
+  const handleAutoSelectParameters = (conditionParams) => {
+    // Collect all table column names that should be selected
+    const columnsToSelect = new Set(selectedParameters);
+    conditionParams.forEach((cp) => {
+      const cols = CONDITION_TO_COLUMNS[cp] || [];
+      cols.forEach((c) => columnsToSelect.add(c));
+    });
+    onParameterChange([...allParameters.filter((p) => columnsToSelect.has(p))]);
   };
 
   return (
@@ -272,7 +307,12 @@ export default function FilterPanel({
         parameters={conditionParameters}
         conditions={conditions}
         onConditionsChange={handleConditionsChange}
+        onAutoSelectParameters={handleAutoSelectParameters}
       />
+
+      <button className="quality-btn" id="filter-quality" title="Quality — coming soon">
+        <span>Quality</span>
+      </button>
     </section>
   );
 }

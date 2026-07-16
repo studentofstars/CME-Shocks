@@ -17,7 +17,7 @@ const SHOCK_TYPE_MAP = {
 const PARAMETER_COLUMNS = [
   'V_sh', 'B_1', 'B_2', 'V_1', 'V_2',
   'den_1', 'den_2', 'T_1', 'T_2', 'M_A1', 'M_A2', 'M_ms1',
-  'M_ms2', 'theta_1', 'theta_2', 'V_A1', 'V_A2', 'V_fms1', 'V_fms2',
+  'M_ms2', 'theta_1', 'theta_2', 'Shock Normal', 'V_A1', 'V_A2', 'V_fms1', 'V_fms2',
   'V_sms1', 'V_sms2'
 ];
 

@@ -7,8 +7,25 @@
 }
 
 .table-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 0.75rem 1.25rem;
   border-bottom: 1px solid var(--border-glass);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.table-info-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.table-info-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .result-count {
@@ -18,6 +35,149 @@
   font-family: var(--font-mono);
 }
 
+.selection-count {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-green);
+  font-family: var(--font-mono);
+}
+
+.clear-selection-btn {
+  background: transparent;
+  border: 1px solid var(--border-glass);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.clear-selection-btn:hover {
+  background: var(--bg-glass-hover);
+  color: var(--text-secondary);
+  border-color: var(--border-active);
+}
+
+/* ── Download Menu ── */
+.download-menu-wrapper {
+  position: relative;
+}
+
+.download-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  background: var(--accent-blue);
+  border: 1px solid var(--accent-blue);
+  border-radius: 6px;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.download-trigger:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 0 12px rgba(99, 149, 255, 0.25);
+}
+
+.download-icon {
+  font-size: 0.85rem;
+}
+
+.download-chevron {
+  font-size: 0.65rem;
+  transition: transform 0.2s ease;
+}
+
+.download-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+.download-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 230px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 0.4rem;
+  z-index: 100;
+  box-shadow: var(--shadow-lg);
+  animation: menuSlideIn 0.15s ease-out;
+}
+
+@keyframes menuSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.download-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  text-align: left;
+}
+
+.download-option:hover {
+  background: var(--bg-glass-hover);
+  color: var(--text-primary);
+}
+
+.format-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  min-width: 36px;
+}
+
+.format-badge.csv {
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--accent-green);
+}
+
+.format-badge.txt {
+  background: rgba(99, 149, 255, 0.15);
+  color: var(--accent-blue);
+}
+
+.format-badge.cdf {
+  background: rgba(167, 139, 250, 0.15);
+  color: var(--accent-violet);
+}
+
+/* ── Table Scroll ── */
 .table-scroll {
   overflow-x: auto;
   max-height: 70vh;
@@ -27,7 +187,7 @@
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   white-space: nowrap;
 }
 
@@ -39,9 +199,9 @@
 
 .data-table th {
   background: var(--bg-secondary);
-  color: var(--text-muted);
+  color: #ffffff;
   font-weight: 600;
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0.7rem 0.8rem;
@@ -49,12 +209,16 @@
   border-bottom: 1px solid var(--border-glass);
 }
 
+:root.light .data-table th {
+  color: #000000;
+}
+
 .data-table td {
   padding: 0.55rem 0.8rem;
   color: var(--text-secondary);
   border-bottom: 1px solid var(--border-glass);
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.88rem;
 }
 
 .data-table tbody tr {
@@ -69,10 +233,75 @@
   color: var(--text-primary);
 }
 
+/* ── Row Selection ── */
+.select-col {
+  width: 40px;
+  min-width: 40px;
+  text-align: center;
+  padding-left: 0.6rem !important;
+  padding-right: 0.2rem !important;
+}
+
+.table-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.table-checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.table-checkmark {
+  width: 17px;
+  height: 17px;
+  border: 2px solid var(--text-muted);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.table-checkbox-label input:checked ~ .table-checkmark {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+.table-checkbox-label input:checked ~ .table-checkmark::after {
+  content: '✓';
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.table-checkbox-label input:indeterminate ~ .table-checkmark {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+.table-checkbox-label input:indeterminate ~ .table-checkmark::after {
+  content: '—';
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.row-selected {
+  background: rgba(99, 149, 255, 0.06) !important;
+}
+
+.row-selected td {
+  color: var(--text-primary) !important;
+}
+
 /* Shock ID column */
 .shock-id-col {
   font-family: var(--font-mono) !important;
-  font-size: 0.72rem !important;
+  font-size: 0.82rem !important;
   color: var(--text-muted) !important;
   white-space: nowrap;
   min-width: 140px;
@@ -98,6 +327,14 @@
 .type-SFD { color: var(--accent-cyan); }
 .type-SRD { color: #f472b6; }
 
+/* Shock Normal cell */
+.shock-normal-cell {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-cyan) !important;
+  letter-spacing: 0.01em;
+}
+
 /* Jump percentage columns */
 .jump-header {
   color: var(--accent-violet) !important;
@@ -107,7 +344,7 @@
 
 .jump-cell {
   font-family: var(--font-mono);
-  font-size: 0.76rem;
+  font-size: 0.86rem;
   font-weight: 600;
   text-align: center;
 }

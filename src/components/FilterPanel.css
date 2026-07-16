@@ -253,8 +253,12 @@
 }
 
 .conditions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 0.75rem 1rem 0.5rem;
   border-bottom: 1px solid var(--border-glass);
+  gap: 0.75rem;
 }
 
 .conditions-title {
@@ -263,6 +267,7 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .conditions-list {
@@ -341,12 +346,11 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
-  padding: 0.6rem 0.75rem;
-  border-top: 1px solid var(--border-glass);
+  flex-shrink: 0;
 }
 
 .conditions-btn {
-  padding: 0.4rem 0.85rem;
+  padding: 0.3rem 0.55rem;
   border-radius: 6px;
   font-family: var(--font-sans);
   font-size: 0.76rem;
@@ -388,4 +392,32 @@
   .condition-input {
     width: 90px;
   }
+}
+
+/* ── Quality Button ── */
+.quality-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.quality-btn:hover {
+  background: var(--bg-glass-hover);
+  border-color: var(--border-active);
+  color: var(--text-primary);
+}
+
+.quality-btn-icon {
+  font-size: 1rem;
 }

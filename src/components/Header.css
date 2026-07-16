@@ -1,16 +1,19 @@
 .site-header {
-  padding: 2.5rem 0 1.5rem;
+  padding: 2.5rem 2rem 1.5rem;
 }
 
 .header-content {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+  gap: 0.7rem;
   width: 100%;
+  max-width: 1000px;
 }
 
 .header-text {
   text-align: left;
+  flex: 1;
   min-width: 0;
 }
 
@@ -41,7 +44,6 @@
   border: 1px solid var(--border-glass);
   box-shadow: var(--shadow-lg), 0 0 40px rgba(99, 149, 255, 0.08);
   position: relative;
-  margin-left: 7cm;
 }
 
 .header-image img {
@@ -122,5 +124,6 @@
 
   .site-header h1 {
     font-size: 1.6rem;
+
   }
 }
