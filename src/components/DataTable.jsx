@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import PlotModal from './PlotModal';
 import './DataTable.css';
 
 // Jump ratio definitions: which pairs get a Jump % column
@@ -161,6 +162,7 @@ function DownloadMenu({ onDownload, label }) {
 
 export default function DataTable({ data, selectedParameters = [] }) {
   const [selectedRows, setSelectedRows] = useState(new Set());
+  const [showPlot, setShowPlot] = useState(false);
 
   // Reset selection when data changes
   React.useEffect(() => {
@@ -224,6 +226,10 @@ export default function DataTable({ data, selectedParameters = [] }) {
     else if (format === 'cdf') downloadCDF(rowsToExport, displayColumns);
   };
 
+  const plotData = selectedRows.size > 0
+    ? data.filter((_, i) => selectedRows.has(i))
+    : data;
+
   if (!data || data.length === 0) {
     return (
       <div className="table-empty">
@@ -253,6 +259,13 @@ export default function DataTable({ data, selectedParameters = [] }) {
               Clear Selection
             </button>
           )}
+          <button
+            className="plot-btn"
+            onClick={() => setShowPlot(true)}
+            title={selectedRows.size > 0 ? `Plot (${selectedRows.size} rows)` : 'Plot All'}
+          >
+            <span>{selectedRows.size > 0 ? `Plot (${selectedRows.size})` : 'Plot'}</span>
+          </button>
           <DownloadMenu
             onDownload={handleDownload}
             label={selectedRows.size > 0 ? `Download (${selectedRows.size})` : 'Download All'}
@@ -276,7 +289,7 @@ export default function DataTable({ data, selectedParameters = [] }) {
               </th>
               <th className="shock-id-col">Shock ID</th>
               {displayColumns.map((col) => (
-                <th key={col.key} className={col.type === 'jump' ? 'jump-header' : ''}>
+                <th key={col.key}>
                   {col.label}
                 </th>
               ))}
@@ -302,13 +315,8 @@ export default function DataTable({ data, selectedParameters = [] }) {
                   {displayColumns.map((col) => {
                     if (col.type === 'jump') {
                       const val = computeJumpPercent(row, col.col1, col.col2);
-                      const numVal = parseFloat(val);
-                      let jumpClass = 'jump-cell';
-                      if (!isNaN(numVal)) {
-                        jumpClass += numVal >= 0 ? ' jump-positive' : ' jump-negative';
-                      }
                       return (
-                        <td key={col.key} className={jumpClass}>
+                        <td key={col.key} className="jump-cell">
                           {val !== '—' ? `${val}%` : val}
                         </td>
                       );
@@ -319,9 +327,7 @@ export default function DataTable({ data, selectedParameters = [] }) {
                         className={
                           col.key === 'Shock Type'
                             ? `type-cell type-${row[col.key]}`
-                            : col.key === 'Shock Normal'
-                              ? 'shock-normal-cell'
-                              : ''
+                            : ''
                         }
                       >
                         {row[col.key]}
@@ -334,6 +340,12 @@ export default function DataTable({ data, selectedParameters = [] }) {
           </tbody>
         </table>
       </div>
+      {showPlot && (
+        <PlotModal
+          data={plotData}
+          onClose={() => setShowPlot(false)}
+        />
+      )}
     </div>
   );
 }

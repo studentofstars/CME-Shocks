@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
+import TabBar from './components/TabBar';
 import FilterPanel from './components/FilterPanel';
 import DataTable from './components/DataTable';
+import LogTab from './components/LogTab';
+import PlaceholderTab from './components/PlaceholderTab';
 import { loadAllData } from './utils/dataLoader';
 import './App.css';
 
@@ -30,6 +33,7 @@ const CONDITION_PARAMETERS = [
 export default function App() {
   const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('database');
   const [selectedParameters, setSelectedParameters] = useState(PARAMETER_COLUMNS);
   const [filters, setFilters] = useState({
     shockTypes: [],
@@ -108,32 +112,50 @@ export default function App() {
     return result;
   }, [allData, filters]);
 
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'database':
+        return (
+          <>
+            <FilterPanel
+              filters={filters}
+              onFilterChange={setFilters}
+              selectedParameters={selectedParameters}
+              onParameterChange={setSelectedParameters}
+              allParameters={PARAMETER_COLUMNS}
+              conditionParameters={CONDITION_PARAMETERS}
+            />
+            {loading ? (
+              <div className="loading-state">
+                <div className="spinner"></div>
+                <p>Loading shock data…</p>
+              </div>
+            ) : (
+              <DataTable data={filteredData} selectedParameters={selectedParameters} />
+            )}
+          </>
+        );
+      case 'log':
+        return <LogTab data={allData} />;
+      case 'documentation':
+      case 'publication':
+      case 'contact':
+        return <PlaceholderTab tabId={activeTab} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="app">
       <button className="theme-toggle-btn" onClick={toggleTheme} aria-label="Toggle Theme">
         {theme === 'dark' ? '☀️' : '🌙'}
       </button>
       <Header />
+      <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
       <main className="main-content">
-        <FilterPanel
-          filters={filters}
-          onFilterChange={setFilters}
-          selectedParameters={selectedParameters}
-          onParameterChange={setSelectedParameters}
-          allParameters={PARAMETER_COLUMNS}
-          conditionParameters={CONDITION_PARAMETERS}
-        />
-        {loading ? (
-          <div className="loading-state">
-            <div className="spinner"></div>
-            <p>Loading shock data…</p>
-          </div>
-        ) : (
-          <DataTable data={filteredData} selectedParameters={selectedParameters} />
-        )}
+        {renderTabContent()}
       </main>
     </div>
   );
 }
-
-
